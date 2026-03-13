@@ -1,0 +1,24 @@
+/* Search container at top */
+.search-container {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  margin-bottom: 20px;    /* spacing below search box */
+}
+
+/* Search box style */
+.search-box {
+  width: 100%;
+  max-width: 400px;      /* limit width */
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-box:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
+}

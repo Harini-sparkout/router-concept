@@ -1,0 +1,33 @@
+<div class="navbar">
+
+  <div class="nav-container">
+
+    <!-- Center Title -->
+    <h2 class="title">
+      E-Commerce
+    </h2>
+    <input
+  type="text"
+  placeholder="Search items..."
+  [(ngModel)]=" searchTerm"   class="search-box" />
+
+    <!-- Right Navigation -->
+    <nav class="nav-links">
+     
+      <a [routerLink]="['/']" [queryParams]="{ ref: 123, theme: 'dark' }">Home</a>
+      <a routerLink="products/47847">Products</a>
+      <!-- Example: passing product with id 101 -->
+<a [routerLink]="['/cart', 102]">cart</a>
+
+      <a routerLink="login">Login</a>
+      <a routerLink="Logout">Logout</a>
+      
+    </nav>
+
+  </div>
+
+</div>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
