@@ -1,0 +1,35 @@
+<div class="address-card" [formGroup]="address">
+
+  <!-- Box 1: Address Type -->
+  <div class="address-box">
+    <label>
+      Address Type:
+      <select formControlName="type">
+        <option value="Home">Home</option>
+        <option value="Work">Work</option>
+      </select>
+    </label>
+ 
+
+    <!-- Validation for type -->
+    <small *ngIf="address.get('type')?.touched && address.get('type')?.errors?.['required']" class="error-msg">
+      Please select Address Type
+    </small>
+  </div>
+
+  <!-- Box 2: Address input + Remove button -->
+  <div class="address-box address-input-row">
+    <label class="address-label">
+      Address:
+      <input type="text" formControlName="line" placeholder="Enter your address" />
+    </label>
+
+    <button type="button" class="remove-btn" (click)="remove()">Remove</button>
+
+    <!-- Validation for address -->
+    <small *ngIf="address.get('line')?.touched && address.get('line')?.errors?.['required']" class="error-msg">
+      Address is required
+    </small>
+  </div>
+
+</div>

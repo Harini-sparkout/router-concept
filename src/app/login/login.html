@@ -1,1 +1,63 @@
-<p>login works!</p>
+<h2>User Login / Registration</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+
+      <label>
+        Name:
+        <input type="text" formControlName="username" />
+        <small *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.errors?.['required']">
+          Name is required.
+        </small>
+        <small *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.errors?.['minlength']">
+          Name should be at least 2 characters.
+        </small>
+      </label>
+      <br>
+
+      <label>
+        Phone:
+        <input type="text" formControlName="phone" />
+        <small *ngIf="loginForm.get('phone')?.touched && loginForm.get('phone')?.errors?.['required']">Phone is required.</small>
+        <small *ngIf="loginForm.get('phone')?.touched && loginForm.get('phone')?.errors?.['pattern']">Phone must be 10 digits.</small>
+      </label>
+      <br>
+
+      <label>
+        Age:
+        <input type="number" formControlName="age" />
+        <small *ngIf="loginForm.get('age')?.touched && loginForm.get('age')?.errors?.['required']">Age is required.</small>
+        <small *ngIf="loginForm.get('age')?.touched && loginForm.get('age')?.errors?.['min']">Age must be greater than 0.</small>
+      </label>
+      <br>
+
+      <label>
+        Gender:
+        <select formControlName="gender">
+          <option value="" disabled>Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <small *ngIf="loginForm.get('gender')?.touched && loginForm.get('gender')?.errors?.['required']">Select gender</small>
+      </label>
+      <br>
+
+      <label>
+        Email:
+        <input type="email" formControlName="email" />
+        <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">Email is required.</small>
+        <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">Invalid email format.</small>
+      </label>
+      <br><br>
+
+    <div formArrayName="addresses">
+  <app-address 
+    *ngFor="let addr of addresses.controls; let i = index" [address]="addr"  (removeAddress)="removeAddress($event)">
+  </app-address>
+</div>
+      
+
+      <button type="button" (click)="addAddress()">Add Another Address</button>
+      <br><br>
+
+      <button type="submit" [disabled]="loginForm.invalid">Submit</button>
+    </form>
