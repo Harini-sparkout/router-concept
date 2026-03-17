@@ -51,7 +51,7 @@
 
     <div formArrayName="addresses">
   <app-address 
-    *ngFor="let addr of addresses.controls; let i = index" [address]="addr"  (removeAddress)="removeAddress($event)">
+    *ngFor="let addr of addressControls; let i = index" [address]="addr"  (removeAddress)="removeAddress($event)">
   </app-address>
 </div>
       

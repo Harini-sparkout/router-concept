@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Address } from '../address/address';
+import { UserService } from '../service/user';
 
 @Component({
   selector: 'app-login',
@@ -12,9 +13,10 @@ import { Address } from '../address/address';
   styleUrls: ['./login.css']
 })
 export class Login {
-  loginForm: FormGroup;
+  loginForm!: FormGroup; // ✅ fix
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
+
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(2)]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
@@ -22,42 +24,67 @@ export class Login {
       gender: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       addresses: this.fb.array([
-        this.fb.group({ type: ['Home', Validators.required], line: ['', Validators.required] })
+        this.fb.group({
+          type: ['Home', Validators.required],
+          line: ['', Validators.required]
+        })
       ])
     });
   }
-
-  get addresses(): FormArray<FormGroup> {
+login() {
+    const user = { name: 'Harini' };
+    this.userService.setUser(user);
+  }
+  get addresses(): FormArray {
     return this.loginForm.get('addresses') as FormArray;
   }
+  get addressControls(): FormGroup[] {
+  return this.addresses.controls as FormGroup[];
+}
 
   addAddress() {
     this.addresses.push(
-      this.fb.group({ type: ['Home', Validators.required], line: ['', Validators.required] })
+      this.fb.group({
+        type: ['Home', Validators.required],
+        line: ['', Validators.required]
+      })
     );
   }
 
-  
   removeAddress(address: FormGroup) {
-  const index = this.addresses.controls.indexOf(address);
-  if (index !== -1) this.addresses.removeAt(index);
-}
+    const index = this.addresses.controls.indexOf(address);
+    if (index !== -1) {
+      this.addresses.removeAt(index);
+    }
+  }
 
   submit() {
     if (this.loginForm.valid) {
-      
+
       const formData = this.loginForm.value;
 
+      // localStorage save
       const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
       existingUsers.push(formData);
       localStorage.setItem('users', JSON.stringify(existingUsers));
 
+      // ✅ Subject (event)
+      this.userService.submitEvent$.next();
+
+      // ✅ BehaviorSubject (state)
+      this.userService.setUser(formData);
+
       console.log('Form Data Saved:', formData);
 
       this.loginForm.reset();
+
       this.loginForm.setControl('addresses', this.fb.array([
-        this.fb.group({ type: ['Home', Validators.required], line: ['', Validators.required] })
+        this.fb.group({
+          type: ['Home', Validators.required],
+          line: ['', Validators.required]
+        })
       ]));
+
     } else {
       console.log('Form Invalid!');
       this.loginForm.markAllAsTouched();
