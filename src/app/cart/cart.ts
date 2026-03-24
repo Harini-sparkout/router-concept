@@ -1,28 +1,29 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
-  imports: [NgIf],
+  imports:[CommonModule],
   templateUrl: './cart.html',
-  styleUrls: ['./cart.css'],
+  standalone: true
 })
-export class Cart {
+export class Cart{
 
-  carts = [
-    { id: 101, name: 'Mobile' },
-    { id: 102, name: 'Laptop' },
-    { id: 103, name: 'Watch' }
-  ];
-  selectedProduct: any;
+ product: any;
+private route = inject(ActivatedRoute);
 
-  constructor(private route: ActivatedRoute) {}
 ngOnInit() {
-    this.route.params.subscribe((params) => {
-      const id = +params['id']; 
-      this.selectedProduct = this.carts.find((c) => c.id === id);
-      console.log('Selected Product:', this.selectedProduct);
-    });
-  }
+
+  const id = this.route.snapshot.paramMap.get('id');
+  const queryParams = this.route.snapshot.queryParamMap;
+
+  this.product = {
+    id: id,
+    name: queryParams.get('name'),
+    price: queryParams.get('price')
+  };
+
+  console.log('Final Product:', this.product);
+}
 }

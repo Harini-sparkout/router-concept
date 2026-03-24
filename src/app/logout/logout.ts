@@ -17,7 +17,7 @@ export class Logout {
     // Your logout logic here
     console.log('User logged out!');
     alert('You have been logged out!');
-    this.confirmed = false; // reset if neededa   
+    this.confirmed = false; // reset if neede  
   }
 
   cancel() {

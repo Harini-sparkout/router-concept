@@ -1,22 +1,26 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
-  imports: [],
   templateUrl: './products.html',
-  styleUrls: ['./products.css'], 
+  standalone: true
 })
-export class Products implements OnInit {
+export class Products {
 
-  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
-  userId = '';
+  product = { id: 1, name: 'Laptop', price: 50000 };
 
-  ngOnInit(): void {
-    // [snapshot] read the param at once
-    const param = this.route.snapshot.paramMap.get('new value');
-    this.userId = param || '-';
-    console.log('Activated route value (snapshot):', this.userId);
+  addToCart() {
+    // Correct navigation with route param + query params
+    this.router.navigate(['/cart', this.product.id], {
+      queryParams: {
+        name: this.product.name,
+        price: this.product.price
+      }
+    });
+
+    console.log('Navigating to Cart with product:', this.product);
   }
 }

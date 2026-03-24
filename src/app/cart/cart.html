@@ -1,8 +1,7 @@
-<div *ngIf="carts; else noProduct">
-  <h2>Product Details</h2>
-  <p><strong>ID:</strong> {{selectedProduct.id }}</p>
-  <p><strong>Name:</strong> {{ selectedProduct.name }}</p>
+<h2>Cart Details</h2>
+
+<div *ngIf="product">
+  <p><strong>Product ID:</strong> {{ product?.id }}</p>
+  <p><strong>Name:</strong> {{ product?.name }}</p>
+  <p><strong>Price:</strong> ₹{{ product?.price }}</p>
 </div>
-<ng-template #noProduct>
-  <p>No product found for this ID.</p>
-</ng-template>
