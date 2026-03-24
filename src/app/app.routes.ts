@@ -7,7 +7,7 @@ import { Logout } from './logout/logout';
 import { NotFound } from './not-found/not-found';
 
 export const routes: Routes = [
-  { path: '', component: Home },
+  { path: 'Home', component: Home },
 
   { path: 'products/:id', component: Products },
   { path: 'cart/:id', component: Cart },

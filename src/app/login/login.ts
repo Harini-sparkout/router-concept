@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { Address } from '../address/address';
-import { UserService } from '../service/user';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule,Address],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, Address],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
 export class Login {
-  loginForm!: FormGroup; // ✅ fix
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  loginForm!: FormGroup;
+
+  constructor(private fb: FormBuilder, private router: Router) {
 
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(2)]],
@@ -31,16 +31,14 @@ export class Login {
       ])
     });
   }
-login() {
-    const user = { name: 'Harini' };
-    this.userService.setUser(user);
-  }
+
   get addresses(): FormArray {
     return this.loginForm.get('addresses') as FormArray;
   }
+
   get addressControls(): FormGroup[] {
-  return this.addresses.controls as FormGroup[];
-}
+    return this.addresses.controls as FormGroup[];
+  }
 
   addAddress() {
     this.addresses.push(
@@ -58,36 +56,36 @@ login() {
     }
   }
 
-  submit() {
-    if (this.loginForm.valid) {
+ submit() {
+  if (this.loginForm.valid) {
+    const formData = this.loginForm.value;
 
-      const formData = this.loginForm.value;
+    //Read existing users from localStorage safely
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
-      // localStorage save
-      const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-      existingUsers.push(formData);
-      localStorage.setItem('users', JSON.stringify(existingUsers));
+    // Add new user data
+    existingUsers.push(formData);
 
-      // ✅ Subject (event)
-      this.userService.submitEvent$.next();
+    //Save back to localStorage
+    localStorage.setItem('users', JSON.stringify(existingUsers));
 
-      // ✅ BehaviorSubject (state)
-      this.userService.setUser(formData);
+    console.log('Saved to localStorage:', existingUsers); // verify
 
-      console.log('Form Data Saved:', formData);
+    //Navigate to Home page 
+    this.router.navigateByUrl('/Home', { state: { user: formData } });
 
-      this.loginForm.reset();
+    //Reset the form
+    this.loginForm.reset();
+    this.loginForm.setControl('addresses', this.fb.array([
+      this.fb.group({
+        type: ['Home', Validators.required],
+        line: ['', Validators.required]
+      })
+    ]));
 
-      this.loginForm.setControl('addresses', this.fb.array([
-        this.fb.group({
-          type: ['Home', Validators.required],
-          line: ['', Validators.required]
-        })
-      ]));
-
-    } else {
-      console.log('Form Invalid!');
-      this.loginForm.markAllAsTouched();
-    }
+  } else {
+    console.log('Form Invalid!');
+    this.loginForm.markAllAsTouched();
   }
+}
 }

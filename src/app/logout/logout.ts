@@ -14,10 +14,10 @@ export class Logout {
   confirmed = false;
 
   logout() {
-    // Your logout logic here
+    // logout 
     console.log('User logged out!');
     alert('You have been logged out!');
-    this.confirmed = false; // reset if neede  
+    this.confirmed = false;
   }
 
   cancel() {
