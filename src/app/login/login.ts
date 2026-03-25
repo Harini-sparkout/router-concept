@@ -60,25 +60,16 @@ export class Login {
   if (this.loginForm.valid) {
     const formData = this.loginForm.value;
 
-    //Read existing users from localStorage safely
-    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-
-    // Add new user data
-    existingUsers.push(formData);
-
-    //Save back to localStorage
-    localStorage.setItem('users', JSON.stringify(existingUsers));
-
-    console.log('Saved to localStorage:', existingUsers); // verify
+  
 
     //Navigate to Home page 
-    this.router.navigateByUrl('/Home', { state: { user: formData } });
+    this.router.navigateByUrl('/home', { state: { user: formData } });
 
     //Reset the form
     this.loginForm.reset();
     this.loginForm.setControl('addresses', this.fb.array([
       this.fb.group({
-        type: ['Home', Validators.required],
+        type: ['home', Validators.required],
         line: ['', Validators.required]
       })
     ]));

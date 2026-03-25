@@ -1,5 +1,6 @@
-<div>
+
   <h3>{{ product.name }}</h3>
   <p>Price: ₹{{ product.price }}</p>
   <button (click)="addToCart()">Add To Cart</button>
-</div>
+  <!-- for child component to display-->
+<router-outlet></router-outlet>
