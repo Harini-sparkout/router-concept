@@ -10,16 +10,18 @@ export const routes: Routes = [
    { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home },
 
-  {
-    path: 'products/:id',
-    component: Products,
-    children: [
-      {
-        path: '',
-        component: ProductDetails //child
-      }
-    ]
-  },
+{
+  path: 'products/:id',
+  loadComponent: () => import('./products/products').then(m => m.Products),
+  children: [
+    {
+      path: 'details', 
+      loadComponent: () =>
+        import('./products/product-details/product-details')
+          .then(m => m.ProductDetails)
+    }
+  ]
+},
   { path: 'cart/:id', component: Cart },
   { path: 'login', component: Login },
   { path: 'logout', component: Logout },
